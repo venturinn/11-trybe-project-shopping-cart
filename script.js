@@ -43,7 +43,7 @@ function createCartItemElement({ sku, name, salePrice }) {
 const products = async () => {
   const productList = await fetchProducts('computer');
 
-  productList.forEach((element) => {
+  productList.results.forEach((element) => {
     const { id, title, thumbnail } = element;
 
   const product = { 
