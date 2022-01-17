@@ -40,6 +40,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+// Requisito 01:
 const products = async () => {
   const productList = await fetchProducts('computer');
 
@@ -58,4 +59,32 @@ const products = async () => {
   });
 };
 
-window.onload = async () => { await products(); };
+// Requisito 02:
+
+const addProduct = async (parent) => {
+const ProductId = parent.firstElementChild.innerText;
+const productData = await fetchItem(ProductId);
+const { id, title, price } = productData;
+
+const product = { 
+  sku: id,
+  name: title,
+  salePrice: price,
+};
+
+const cartItem = createCartItemElement(product);
+const cartItens = document.querySelector('.cart__items');
+cartItens.appendChild(cartItem);
+};
+
+function buttonsAddMonitor() {
+const buttonsAddProduct = document.querySelectorAll('.item__add');
+
+buttonsAddProduct.forEach((button) => {
+button.addEventListener('click', function () { addProduct(button.parentElement); });
+});
+}
+
+// parentElement : retorna o elemento pai.
+
+window.onload = async () => { await products(); buttonsAddMonitor(); };
