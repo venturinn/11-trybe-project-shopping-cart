@@ -59,6 +59,22 @@ const products = async () => {
   });
 };
 
+// Requisito 03:
+
+function removeItem(item) {
+  if (item.parentElement !== null) {
+  item.parentElement.removeChild(item);
+  }
+  }
+  
+  function cartItensClickMonitor() {
+  const cartItems = document.querySelectorAll('.cart__item');
+  
+  cartItems.forEach((item) => {
+    item.addEventListener('click', function () { removeItem(item); });
+  });
+  }
+
 // Requisito 02:
 
 const addProduct = async (parent) => {
@@ -73,8 +89,10 @@ const product = {
 };
 
 const cartItem = createCartItemElement(product);
-const cartItens = document.querySelector('.cart__items');
-cartItens.appendChild(cartItem);
+const cartItems = document.querySelector('.cart__items');
+cartItems.appendChild(cartItem);
+
+cartItensClickMonitor();
 };
 
 function buttonsAddMonitor() {
@@ -84,7 +102,5 @@ buttonsAddProduct.forEach((button) => {
 button.addEventListener('click', function () { addProduct(button.parentElement); });
 });
 }
-
-// parentElement : retorna o elemento pai.
 
 window.onload = async () => { await products(); buttonsAddMonitor(); };
