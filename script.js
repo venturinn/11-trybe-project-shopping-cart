@@ -1,6 +1,9 @@
 const cartItems = document.querySelector('.cart__items');
 const totalPriceChild = document.querySelector('.totalPriceChild');
-const memoryCartItems = getSavedCartItems();
+const emptyCartButton = document.querySelector('.empty-cart');
+let memoryCartItems = getSavedCartItems();
+
+if (memoryCartItems === null) memoryCartItems = [];
 let totalPriceValue = 0;
 
 function createProductImageElement(imageSource) {
@@ -150,13 +153,26 @@ function buttonsAddMonitor() {
 
 function restoreCartItems() {
   const storage = getSavedCartItems();
-
+  
+  if (storage !== null) {
   storage.forEach((product) => {
     const cartItem = createCartItemElement(product);
     cartItems.appendChild(cartItem);
     sumTotalPrice(product.salePrice); // Refaz a somatória dos preços dos produtos no carrinho
   });
+  }
 }
+
+// Requisito 06:
+
+function emptyCart() {
+  totalPriceValue = 0;
+  sumTotalPrice(0);
+  cartItems.innerHTML = [];
+  localStorage.clear();
+}
+
+emptyCartButton.addEventListener('click', emptyCart);
 
 window.onload = async () => {
   await products();
