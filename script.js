@@ -1,5 +1,7 @@
 const cartItems = document.querySelector('.cart__items');
+const totalPriceChild = document.querySelector('.totalPriceChild');
 const memoryCartItems = getSavedCartItems();
+let totalPriceValue = 0;
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -45,6 +47,18 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+// Requisito 05:
+
+function sumTotalPrice(number) {
+  totalPriceValue += number;
+  totalPriceChild.innerText = `$ ${totalPriceValue.toFixed(2)}`;
+  }
+
+function subtractTotalPrice(number) {
+  totalPriceValue -= number;
+  totalPriceChild.innerText = `$ ${totalPriceValue.toFixed(2)}`;
+  }
+
 // Requisito 01:
 const products = async () => {
   const productList = await fetchProducts('computer');
@@ -66,25 +80,24 @@ const products = async () => {
 
 // Requisito 03:
 
-function removeItem(item, index) {
+const getProductPrice = async (sku) => {
+  const productData = await fetchItem(sku);
+  const { price } = productData;
+  return price;
+};
+
+const removeItem = async (item, index) => {
     if (item.parentElement !== null) { // Verificar essa linha
-    console.log(index);
     cartItems.removeChild(item);
 
     memoryCartItems.splice(index, 1);
     saveCartItems(memoryCartItems); // Atualiza o Local Storage com os produtos removidos
-    
-    /*
-    const sku = item.innerText.substring(5, 18);
 
-    for (let index = 0; index < memoryCartItems.length; index += 1) {
-      if (memoryCartItems[index].sku === sku) {
-        memoryCartItems.splice(index, 1);
-        break;
-    }
-    */
+    const itemSku = item.innerText.substring(5, 18); // Extrai a sku do produto
+    const priceProductremove = await getProductPrice(itemSku); // Busca o preço na API
+    subtractTotalPrice(priceProductremove); 
   }
-  }
+  };
 
 function cartItensClickMonitor() {
   const cartItem = document.querySelectorAll('.cart__item');
@@ -106,13 +119,11 @@ const addProduct = async (ProductId) => {
   // const ProductId = parent.firstElementChild.innerText;
   const productData = await fetchItem(ProductId);
   const { id, title, price } = productData;
-
   const product = {
     sku: id,
     name: title,
     salePrice: price,
   };
-
   const cartItem = createCartItemElement(product);
   cartItems.appendChild(cartItem);
 
@@ -120,6 +131,8 @@ const addProduct = async (ProductId) => {
 
   memoryCartItems.push(product); // Adiciona cada produto selecionado ao array que será armazenado no Local Storage
   saveCartItems(memoryCartItems); // Salva array de objetos no Local Storage
+
+  sumTotalPrice(product.salePrice);
 };
 
 function buttonsAddMonitor() {
@@ -141,6 +154,7 @@ function restoreCartItems() {
   storage.forEach((product) => {
     const cartItem = createCartItemElement(product);
     cartItems.appendChild(cartItem);
+    sumTotalPrice(product.salePrice); // Refaz a somatória dos preços dos produtos no carrinho
   });
 }
 
