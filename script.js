@@ -1,6 +1,8 @@
 const cartItems = document.querySelector('.cart__items');
 const totalPriceChild = document.querySelector('.totalPriceChild');
 const emptyCartButton = document.querySelector('.empty-cart');
+const apiMessage = document.querySelector('.wait_Api');
+
 let memoryCartItems = getSavedCartItems();
 
 if (memoryCartItems === null) memoryCartItems = [];
@@ -50,6 +52,20 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+// Requisito 07:
+
+function waitApi() {
+  const message = document.createElement('p');
+  message.className = 'loading';
+  message.innerText = 'carregando...';
+  
+  apiMessage.appendChild(message);
+  }
+  
+  function ApiIsReady() {
+    apiMessage.innerHTML = [];
+  }
+
 // Requisito 05:
 
 function sumTotalPrice(number) {
@@ -64,9 +80,10 @@ function subtractTotalPrice(number) {
 
 // Requisito 01:
 const products = async () => {
+  waitApi();
   const productList = await fetchProducts('computer');
-
-  productList.results.forEach((element) => {
+  ApiIsReady();
+    productList.results.forEach((element) => {
     const { id, title, thumbnail } = element;
 
     const product = {
@@ -84,7 +101,9 @@ const products = async () => {
 // Requisito 03:
 
 const getProductPrice = async (sku) => {
+  waitApi();
   const productData = await fetchItem(sku);
+  ApiIsReady();
   const { price } = productData;
   return price;
 };
@@ -119,8 +138,9 @@ function cartItensClickMonitor() {
 // Requisito 02:
 
 const addProduct = async (ProductId) => {
-  // const ProductId = parent.firstElementChild.innerText;
+  waitApi();
   const productData = await fetchItem(ProductId);
+  ApiIsReady();
   const { id, title, price } = productData;
   const product = {
     sku: id,
