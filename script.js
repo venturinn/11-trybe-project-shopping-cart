@@ -1,5 +1,5 @@
 const cartItems = document.querySelector('.cart__items');
-const totalPriceChild = document.querySelector('.totalPriceChild');
+const totalPriceChild = document.querySelector('.total-price');
 const emptyCartButton = document.querySelector('.empty-cart');
 const apiMessage = document.querySelector('.wait_Api');
 
@@ -70,12 +70,14 @@ function waitApi() {
 
 function sumTotalPrice(number) {
   totalPriceValue += number;
-  totalPriceChild.innerText = `$ ${totalPriceValue.toFixed(2)}`;
-  }
+  const total = parseFloat(totalPriceValue.toFixed(2));
+    totalPriceChild.innerText = total;
+}
 
 function subtractTotalPrice(number) {
   totalPriceValue -= number;
-  totalPriceChild.innerText = `$ ${totalPriceValue.toFixed(2)}`;
+  const total = parseFloat(totalPriceValue.toFixed(2));
+  totalPriceChild.innerText = total;
   }
 
 // Requisito 01:
