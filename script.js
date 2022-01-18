@@ -191,6 +191,7 @@ function emptyCart() {
   totalPriceValue = 0;
   sumTotalPrice(0);
   cartItems.innerHTML = [];
+  memoryCartItems = [];
   localStorage.clear();
 }
 
