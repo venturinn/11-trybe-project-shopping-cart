@@ -3,7 +3,7 @@ const totalPriceChild = document.querySelector('.total-price');
 const emptyCartButton = document.querySelector('.empty-cart');
 const apiMessage = document.querySelector('.wait_Api');
 
-let memoryCartItems = getSavedCartItems();
+let memoryCartItems = JSON.parse(getSavedCartItems());
 
 if (memoryCartItems === null) memoryCartItems = [];
 let totalPriceValue = 0;
@@ -174,7 +174,7 @@ function buttonsAddMonitor() {
 // Requisito 04:
 
 function restoreCartItems() {
-  const storage = getSavedCartItems();
+  const storage = JSON.parse(getSavedCartItems());
   
   if (storage !== null) {
   storage.forEach((product) => {
