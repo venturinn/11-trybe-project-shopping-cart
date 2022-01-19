@@ -3,7 +3,6 @@ const { fetchProducts } = require("../helpers/fetchProducts");
 const computadorSearch = require("../mocks/search");
 
 describe("1 - Teste a função fecthProducts", () => {
-  // implemente seus testes aqui
 
   it("Testa se a fetchProducts é uma função", () => {
     expect(typeof fetchProducts).toBe("function");
@@ -29,7 +28,6 @@ describe("1 - Teste a função fecthProducts", () => {
     const response = await fetchProducts();
     expect(response).toEqual(new Error('You must provide an url'));
   });
-
 
   // fail('Teste vazio');
 });
